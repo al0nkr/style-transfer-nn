@@ -1,4 +1,6 @@
-pandas
 numpy
 torch
--e .
+pillow
+torchvision
+matplotlib
+#-e .
