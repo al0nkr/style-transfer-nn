@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Transfer Web App</title>
+    <style>
+        .custom-image-container, .custom-style-container {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleImageOptions() {
+            const defaultLibraryRadio = document.getElementById('defaultLibrary');
+            const customImageRadio = document.getElementById('customImage');
+            const customStyleRadio = document.getElementById('customStyle');
+            const defaultImageContainer = document.querySelector('.default-image-container');
+            const customImageContainer = document.querySelector('.custom-image-container');
+            const customStyleContainer = document.querySelector('.custom-style-container');
+
+            if (defaultLibraryRadio.checked) {
+                defaultImageContainer.style.display = 'block';
+                customImageContainer.style.display = 'none';
+                customStyleContainer.style.display = 'none';
+            } else if (customImageRadio.checked) {
+                defaultImageContainer.style.display = 'none';
+                customImageContainer.style.display = 'block';
+                customStyleContainer.style.display = 'none';
+            } else if (customStyleRadio.checked) {
+                defaultImageContainer.style.display = 'none';
+                customImageContainer.style.display = 'none';
+                customStyleContainer.style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Style Transfer Web App</h1>
+    <form action="/transfer" method="post" enctype="multipart/form-data">
+        <!-- Radio buttons for selecting image source -->
+        <label>Choose Image Source:</label>
+        <br>
+        <input type="radio" id="defaultLibrary" name="imageSource" value="default" checked onclick="toggleImageOptions()">
+        <label for="defaultLibrary">Default Image Library</label>
+        <br>
+        <input type="radio" id="customImage" name="imageSource" value="custom" onclick="toggleImageOptions()">
+        <label for="customImage">Upload Custom Images</label>
+        <br>
+        <input type="radio" id="customStyle" name="imageSource" value="custom" onclick="toggleImageOptions()">
+        <label for="customStyle">Upload Custom Style</label>
+        <br>
+
+        <!-- Default Image Selection Container -->
+        <div class="default-image-container">
+            <!-- Dropdown for selecting content image -->
+            <label for="contentImage">Select Content Image:</label>
+            <select name="contentImage" id="contentImage">
+                <option value="" disabled selected>Select Content Image</option>
+                {% for content_image in content_images %}
+                    <option value="{{ content_image }}">{{ content_image }}</option>
+                {% endfor %}
+            </select>
+            <br>
+
+            <!-- Dropdown for selecting style image -->
+            <label for="styleImage">Select Style Image:</label>
+            <select name="styleImage" id="styleImage">
+                <option value="" disabled selected>Select Style Image</option>
+                {% for style_image in style_images %}
+                    <option value="{{ style_image }}">{{ style_image }}</option>
+                {% endfor %}
+            </select>
+            <br>
+        </div>
+
+        <!-- Custom Image Upload Container -->
+        <div class="custom-image-container" style="display: none;">
+            <!-- Input for content image -->
+            <label for="customContentImage">Upload Custom Content Image:</label>
+            <input type="file" id="customContentImage" name="customContentImage" accept="image/*">
+            <br>
+
+            <!-- Input for style image -->
+            <label for="customStyleImage">Upload Custom Style Image:</label>
+            <input type="file" id="customStyleImage" name="customStyleImage" accept="image/*">
+            <br>
+        </div>
+
+        <!-- Custom Style Upload Container -->
+        <div class="custom-style-container" style="display: none;">
+            <!-- Input for style image -->
+            <label for="customStyleImage">Upload Custom Style Image:</label>
+            <input type="file" id="customStyleImage" name="customStyleImage" accept="image/*">
+            <br>
+        </div>
+
+        <!-- Input for number of epochs -->
+        <label for="epochs">Epochs:</label>
+        <input type="number" id="epochs" name="epochs" min="1" step="10" max="10000" value="100">
+        <br>
+
+        <!-- Input for learning rate -->
+        <label for="learningRate">Learning Rate:</label>
+        <input type="number" id="learningRate" name="learningRate" step="0.001" value="0.001">
+        <br>
+
+        <!-- Input for alpha -->
+        <label for="alpha">Alpha:</label>
+        <input type="number" id="alpha" name="alpha" step="0.1" value="1">
+        <br>
+
+        <!-- Input for beta -->
+        <label for="beta">Beta:</label>
+        <input type="number" id="beta" name="beta" step="1" value="100">
+        <br>
+
+        <!-- Checkbox to save the image -->
+        <label for="saveImage">Save Image:</label>
+        <input type="checkbox" id="saveImage" name="saveImage" value="yes">
+        <br>
+
+        <!-- Submit button -->
+        <input type="submit" value="Transfer Style">
+    </form>
+</body>
+</html>

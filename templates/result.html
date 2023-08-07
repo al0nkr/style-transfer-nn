@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Style Transfer Result</title>
+    <!-- Other CSS and JavaScript imports -->
+</head>
+<body>
+    <h1>Style Transfer Result</h1>
+    <img src="data:image/png;base64,{{ img_data }}" alt="Generated Image">
+    <p>Epoch: {{ epoch }}</p>
+    <a href="{{ url_for('transfer_style') }}">Back to Style Transfer</a>
+    <!-- Add any other elements or styling as needed -->
+</body>
+</html>

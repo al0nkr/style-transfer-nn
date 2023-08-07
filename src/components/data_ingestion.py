@@ -2,7 +2,7 @@ import os
 from PIL import Image
 import torch
 from torchvision import transforms
-import data_transformation as DT
+import src.components.data_transformation as DT #src.components.
 
 class DataIngestion:
     def __init__(self):
