@@ -1,12 +1,16 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request
 import base64
 from io import BytesIO
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import src.components.data_ingestion as DI
 from src.components.model_trainer import modelTrain
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+app.config["UPLOAD_FOLDER"] = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static', 'uploads'))
 content_dir = DI.default_content_dir
 style_dir = DI.default_style_dir
 
@@ -21,17 +25,56 @@ def index():
 @app.route('/transfer', methods=['POST'])
 def transfer_style():
     # Retrieve user input from the form
-    content_image = request.form['contentImage']
-    style_image = request.form['styleImage']
     epochs = int(request.form['epochs'])
     learning_rate = float(request.form['learningRate'])
     alpha = float(request.form['alpha'])
     beta = float(request.form['beta'])
 
-    # Construct the file paths for the content and style images
-    content_image_path = os.path.join(content_dir, content_image)
-    style_image_path = os.path.join(style_dir, style_image)
+    selected_source = request.form.get("imageSource")
+    content_image = request.form.get('contentImage')
+    style_image = request.form.get('styleImage')
 
+    if selected_source == 'default':
+        content_image_path = os.path.join(content_dir, content_image)
+        style_image_path = os.path.join(style_dir, style_image)
+
+    elif selected_source == 'custom_image':
+        custom_content = request.files.get('customContentImage')
+        content_image_filename = secure_filename(custom_content.filename)
+        content_image_path = os.path.join(app.config['UPLOAD_FOLDER'], content_image_filename)
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        print("Content Image Path:", content_image_path)
+        custom_content.save(content_image_path)
+
+        style_image_path = os.path.join(style_dir, style_image)
+
+    elif selected_source == 'custom_style':
+        custom_style = request.files.get('customStyleImage')
+        style_image_filename = secure_filename(custom_style.filename)
+
+        style_image_path = os.path.join(app.config['UPLOAD_FOLDER'], style_image_filename)
+        print("Style Image Path:", style_image_path)
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        custom_style.save(style_image_path)
+
+        content_image_path = os.path.join(content_dir, content_image)
+    
+    elif selected_source == 'custom':
+        custom_content = request.files.get('customContentImage')
+        content_image_filename = secure_filename(custom_content.filename)
+        content_image_path = os.path.join(app.config['UPLOAD_FOLDER'], content_image_filename)
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        print("Content Image Path:", content_image_path)
+        custom_content.save(content_image_path)
+
+        custom_style = request.files.get('customStyleImage')
+        style_image_filename = secure_filename(custom_style.filename)
+        style_image_path = os.path.join(app.config['UPLOAD_FOLDER'], style_image_filename)
+        print("Style Image Path:", style_image_path)
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        custom_style.save(style_image_path)
+
+    
     # Perform style transfer
     test = modelTrain(content_image_path, style_image_path)
     generated_image = test.train(epochs=epochs, lr=learning_rate, alpha=alpha, beta=beta)

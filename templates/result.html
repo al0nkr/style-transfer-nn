@@ -2,13 +2,18 @@
 <html>
 <head>
     <title>Style Transfer Result</title>
-    <!-- Other CSS and JavaScript imports -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap">
+    <link rel="stylesheet" href="../static/result_style.css">
 </head>
 <body>
     <h1>Style Transfer Result</h1>
-    <img src="data:image/png;base64,{{ img_data }}" alt="Generated Image">
+    <div class="image-container">
+        <img src="data:image/png;base64,{{ img_data }}" alt="Generated Image">
+        <div class="dropdown-content">
+            <img src="data:image/png;base64,{{ img_data }}" alt="Generated Image">
+        </div>
+    </div>
     <p>Epoch: {{ epoch }}</p>
-    <a href="{{ url_for('transfer_style') }}">Back to Style Transfer</a>
-    <!-- Add any other elements or styling as needed -->
+    <a href="{{ url_for('index') }}">Back to Style Transfer</a>
 </body>
 </html>

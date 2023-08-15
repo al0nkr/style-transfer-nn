@@ -1,55 +1,73 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Style Transfer Web App</title>
-    <style>
-        .custom-image-container, .custom-style-container {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap">
+    <link rel="stylesheet" href="../static/style.css">
     <script>
         function toggleImageOptions() {
             const defaultLibraryRadio = document.getElementById('defaultLibrary');
             const customImageRadio = document.getElementById('customImage');
             const customStyleRadio = document.getElementById('customStyle');
-            const defaultImageContainer = document.querySelector('.default-image-container');
+            const customImageStyleRadio = document.getElementById('customImageStyle');
+            const defaultContentContainer = document.querySelector('.default-content-container');
+            const defaultStyleContainer = document.querySelector('.default-style-container');
             const customImageContainer = document.querySelector('.custom-image-container');
             const customStyleContainer = document.querySelector('.custom-style-container');
 
             if (defaultLibraryRadio.checked) {
-                defaultImageContainer.style.display = 'block';
+                defaultContentContainer.style.display = 'block';
+                defaultStyleContainer.style.display = 'block';
                 customImageContainer.style.display = 'none';
                 customStyleContainer.style.display = 'none';
             } else if (customImageRadio.checked) {
-                defaultImageContainer.style.display = 'none';
+                defaultContentContainer.style.display = 'none';
+                defaultStyleContainer.style.display = 'block';
                 customImageContainer.style.display = 'block';
                 customStyleContainer.style.display = 'none';
             } else if (customStyleRadio.checked) {
-                defaultImageContainer.style.display = 'none';
+                defaultContentContainer.style.display = 'block';
+                defaultStyleContainer.style.display = 'none';
                 customImageContainer.style.display = 'none';
                 customStyleContainer.style.display = 'block';
             }
+            else if (customImageStyleRadio.checked) {
+                defaultContentContainer.style.display = 'none';
+                defaultStyleContainer.style.display = 'none';
+                customImageContainer.style.display = 'block';
+                customStyleContainer.style.display = 'block';
+            }
         }
+        customContentInput.disabled = !customImageRadio.checked && !customImageStyleRadio.checked;
+        customStyleInput.disabled = !customStyleRadio.checked && !customImageStyleRadio.checked;
     </script>
 </head>
 <body>
     <h1>Style Transfer Web App</h1>
     <form action="/transfer" method="post" enctype="multipart/form-data">
         <!-- Radio buttons for selecting image source -->
-        <label>Choose Image Source:</label>
-        <br>
-        <input type="radio" id="defaultLibrary" name="imageSource" value="default" checked onclick="toggleImageOptions()">
-        <label for="defaultLibrary">Default Image Library</label>
-        <br>
-        <input type="radio" id="customImage" name="imageSource" value="custom" onclick="toggleImageOptions()">
-        <label for="customImage">Upload Custom Images</label>
-        <br>
-        <input type="radio" id="customStyle" name="imageSource" value="custom" onclick="toggleImageOptions()">
-        <label for="customStyle">Upload Custom Style</label>
-        <br>
+        <div class="radio-container">
+            <label>
+                <input type="radio" id="defaultLibrary" class = "radioInput" name="imageSource" value="default" checked onchange=toggleImageOptions()>
+                Default Image Library
+            </label>
+            <label>
+                <input type="radio" id="customImage" class = "radioInput"  name="imageSource" value="custom_image" onchange=toggleImageOptions()>
+                Upload Custom Images
+            </label>
+            <label>
+                <input type="radio" id="customStyle" class = "radioInput" name="imageSource" value="custom_style" onchange=toggleImageOptions()>
+                Upload Custom Style
+            </label>
+            <label>
+                <input type="radio" id="customImageStyle" class = "radioInput" name="imageSource" value="custom" onchange=toggleImageOptions()>
+                Upload Custom Image and Style
+            </label>
+        </div>
 
         <!-- Default Image Selection Container -->
-        <div class="default-image-container">
+        <div class="default-content-container">
             <!-- Dropdown for selecting content image -->
             <label for="contentImage">Select Content Image:</label>
             <select name="contentImage" id="contentImage">
@@ -59,7 +77,8 @@
                 {% endfor %}
             </select>
             <br>
-
+        </div>
+        <div class="default-style-container">
             <!-- Dropdown for selecting style image -->
             <label for="styleImage">Select Style Image:</label>
             <select name="styleImage" id="styleImage">
@@ -76,11 +95,6 @@
             <!-- Input for content image -->
             <label for="customContentImage">Upload Custom Content Image:</label>
             <input type="file" id="customContentImage" name="customContentImage" accept="image/*">
-            <br>
-
-            <!-- Input for style image -->
-            <label for="customStyleImage">Upload Custom Style Image:</label>
-            <input type="file" id="customStyleImage" name="customStyleImage" accept="image/*">
             <br>
         </div>
 
@@ -110,11 +124,6 @@
         <!-- Input for beta -->
         <label for="beta">Beta:</label>
         <input type="number" id="beta" name="beta" step="1" value="100">
-        <br>
-
-        <!-- Checkbox to save the image -->
-        <label for="saveImage">Save Image:</label>
-        <input type="checkbox" id="saveImage" name="saveImage" value="yes">
         <br>
 
         <!-- Submit button -->

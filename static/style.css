@@ -1,0 +1,71 @@
+body {
+    background: linear-gradient(to right, #8800ff, #78dfdc);
+    font-family: 'Poppins',sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8f34eb 0%, #5934eb 100%);
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.3)
+}
+
+form label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+form input[type="number"],
+form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: 'Poppins',sans-serif;
+}
+form input[type="number"] {
+    height: 40px;
+    font-family: 'Poppins',sans-serif;
+}
+
+form select {
+    height: 40px; 
+    background-position: right center;
+    background-size: 20px;
+    padding-right: 30px;
+    font-family: 'Poppins',sans-serif;
+}
+
+form input[type="file"] {
+    margin-top: 10px;
+    font-family: 'Poppins',sans-serif;
+}
+
+form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #8f34eb;
+    color: #fff;
+    font-family: 'Poppins',sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.imageContainer {
+    max-width: 500px;
+    margin: 20px auto;
+}

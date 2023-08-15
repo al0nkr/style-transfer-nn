@@ -26,9 +26,3 @@ def plot_img(img_path,trf = None,title = None,normalize = False):
         plt.title(title)
     plt.show()
 
-
-test = str(DI.DataIngestion.load_content_paths(DI.default_content_dir)[0])
-DT = DT.DataTransform()
-resize_trf = DT.resize()
-plot_img(img_path=test, title="swans (Normalized)",normalize=True)
-plot_img(img_path=test ,  title="swans smol" , trf=resize_trf)
